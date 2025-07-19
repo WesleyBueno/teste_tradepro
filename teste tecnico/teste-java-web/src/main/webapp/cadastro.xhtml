@@ -22,19 +22,19 @@
         <p:panelGrid columns="2" >
 
             <p:outputLabel for="nome">Nome</p:outputLabel>
-            <p:inputText id="nome" value="#{PessoaBean.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!"/>
+            <p:inputText id="nome" value="#{pessoaBean.pessoa.nome}" required="true" requiredMessage="O nome é obrigatório!"/>
             
             <p:outputLabel for="sobrenome">Sobrenome</p:outputLabel>
-            <p:inputText id="sobrenome" value="#{PessoaBean.pessoa.sobrenome}" required="true" requiredMessage="O sobrenome é obrigatório!"/>
+            <p:inputText id="sobrenome" value="#{pessoaBean.pessoa.sobrenome}" required="true" requiredMessage="O sobrenome é obrigatório!"/>
             
             <p:outputLabel>Sexo</p:outputLabel>
-        	<p:selectOneRadio id="sexo" value="#{PessoaBean.pessoa.sexo}" layout="lineDirection" required="true" requiredMessage="O sexo é obrigatório!">
+        	<p:selectOneRadio id="sexo" value="#{pessoaBean.pessoa.sexo}" layout="lineDirection" required="true" requiredMessage="O sexo é obrigatório!">
         		<f:selectItem itemLabel="Feminino" itemValue="Feminino"/>
             	<f:selectItem itemLabel="Masculino" itemValue="Masculino"/>
             </p:selectOneRadio>
 
             <p:outputLabel for="nascimento">Nascimento</p:outputLabel>
-            <p:inputText id="nascimento" value="#{PessoaBean.pessoa.nascimento}" required="true" requiredMessage="O nascimento é obrigatório!"/>
+            <p:inputText id="nascimento" value="#{pessoaBean.pessoa.dataNascimento}" required="true" requiredMessage="O nascimento é obrigatório!"/>
 
             <p:outputLabel for="cep">CEP</p:outputLabel>
             <p:inputText id="cep" value="#{PessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!"/>
@@ -42,7 +42,7 @@
             <p:outputLabel for="endereco" >Endereço</p:outputLabel>
             <p:inputText id="endereco" placeholder="Rua, bairro, cidade" value="#{PessoaBean.pessoa.endereco}"  required="true" requiredMessage="O endereco é obrigatório!"/>
             
-            <p:commandButton value="Salvar" action="#{PessoaBean.salvar}"/>
+            <p:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
        		<p:commandButton value="Cancelar" action="#{PessoaBean.cancelar}"/>
 
         </p:panelGrid>
