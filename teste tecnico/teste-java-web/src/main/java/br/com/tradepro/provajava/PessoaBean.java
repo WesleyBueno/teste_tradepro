@@ -12,18 +12,21 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.stream.JsonParsingException;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import br.com.tradepro.provajava.entity.Pessoa;
 
 
 @Named
-@RequestScoped
+@ViewScoped
 public class PessoaBean implements Serializable {
 
 	/**
@@ -113,16 +116,36 @@ public class PessoaBean implements Serializable {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		
 		try {
+			
+			//valida se já existe o nome e sobrenome no banco dedados
+			TypedQuery<Pessoa> query = em.createQuery("SELECT p FROM Pessoa p WHERE p.nome = :nome AND p.sobrenome = :sobrenome", Pessoa.class);
+			
+			//pega os valores do formulario para a query
+			query.setParameter("nome", this.pessoa.getNome());
+			query.setParameter("sobrenome", this.pessoa.getSobrenome());
+			
+			try {
+				query.getSingleResult();
+				
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Este nome já existe"));
+				return;
+			} catch (NoResultException e) {}
+			
 			em.getTransaction().begin();
 			em.persist(this.pessoa);
 			em.getTransaction().commit();
 			
-			this.init(); 
-			
+			this.pessoas.add(this.pessoa);
 			this.pessoa = new Pessoa();
+			
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Cadastro realizado!"));
+			
 		} catch (Exception e) {
 			if(em.getTransaction().isActive()) {
 				em.getTransaction().rollback();
+				
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar", "Ocorreu um erro no salvamento dos dados"));
+				e.printStackTrace();
 			}
 		} finally {
 			em.close();
