@@ -4,6 +4,9 @@
 package br.com.tradepro.provajava.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
@@ -108,6 +111,19 @@ public class Pessoa implements Serializable {
 		this.dataNascimento = dataNascimento;
 	}
 	
+	@Transient
+	public int getIdade() {
+		if(this.dataNascimento == null) {
+			return 0;
+		}
+		
+		LocalDate dataNasc = this.dataNascimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		
+		LocalDate hoje = LocalDate.now();
+		
+		return Period.between(dataNasc, hoje).getYears();
+		
+	}
 	public String getCep() {
 		return cep;
 	}
