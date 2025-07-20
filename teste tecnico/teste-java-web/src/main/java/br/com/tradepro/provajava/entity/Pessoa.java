@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -48,6 +49,12 @@ public class Pessoa implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@Column(name = "data_nascimento")
 	private Date dataNascimento;
+	
+	@Transient
+	private String cep;
+	
+	@Column(name = "endereco")
+	private String endereco;
 
 	public Pessoa() {
 	}
@@ -99,6 +106,22 @@ public class Pessoa implements Serializable {
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+	
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+	
+	public String getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	@Override

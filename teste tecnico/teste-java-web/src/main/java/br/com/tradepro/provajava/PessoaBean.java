@@ -1,12 +1,24 @@
 package br.com.tradepro.provajava;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
+import javax.json.stream.JsonParsingException;
 import javax.persistence.EntityManager;
 
 import br.com.tradepro.provajava.entity.Pessoa;
+
 
 @Named
 @RequestScoped
@@ -28,6 +40,55 @@ public class PessoaBean implements Serializable {
 
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+	
+	public void buscarCep() {
+		String cep = this.pessoa.getCep();
+		
+		if(cep != null) {
+			cep = cep.replaceAll("[^0-9]", "");
+		}
+		
+		if(cep == null || cep.length() !=8) {
+			return;
+		}
+		
+		try {
+			URL url = new URL("https://brasilapi.com.br/api/cep/v1/" + cep);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			
+			if(conn.getResponseCode() != 200) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "CEP não encontrado ou inválido"));
+				return;
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+			StringBuilder response = new StringBuilder();
+			String output;
+			while ((output = br.readLine()) != null) {
+				response.append(output);
+			}
+			conn.disconnect();
+			
+			 JsonReader jsonReader = (JsonReader) Json.createReader(new StringReader(response.toString()));
+	         JsonObject jsonObject = jsonReader.readObject();
+	            
+	         String rua = jsonObject.getString("street", "");
+	         String bairro = jsonObject.getString("neighborhood", "");
+	         String cidade = jsonObject.getString("city", "");
+	         String estado = jsonObject.getString("state", "");
+	         
+	         String enderecoCompleto = String.format("%s, %s, %s - %s", rua, bairro, cidade, estado).trim();
+	         this.pessoa.setEndereco(enderecoCompleto);
+	         
+	         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso", "Endereço encontrado!"));
+		} catch(JsonParsingException e) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", "Formato inválido"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, "Erro Crítico", "Não foi possível encontrar a API"));
+		}
 	}
 	
 	public void salvar() {

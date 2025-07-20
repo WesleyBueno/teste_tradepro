@@ -17,6 +17,7 @@
 <h:body>
   
     <h:form>
+    	<p:messages id="messages" showDetail="true" closable="true"><p:autoUpdate/></p:messages>
     
    <p:panel header="Cadastro de Nova Pessoa">
         <p:panelGrid columns="2" >
@@ -37,13 +38,16 @@
             <p:inputText id="nascimento" value="#{pessoaBean.pessoa.dataNascimento}" required="true" requiredMessage="O nascimento é obrigatório!"/>
 
             <p:outputLabel for="cep">CEP</p:outputLabel>
-            <p:inputText id="cep" value="#{PessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!"/>
+            <p:inputMask id="cep" value="#{pessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!" mask="99999-999">
+            	<p:ajax event="blur" listener="#{pessoaBean.buscarCep}" update="endereco messages" process="@this"></p:ajax>
+            </p:inputMask>
+            
             
             <p:outputLabel for="endereco" >Endereço</p:outputLabel>
-            <p:inputText id="endereco" placeholder="Rua, bairro, cidade" value="#{PessoaBean.pessoa.endereco}"  required="true" requiredMessage="O endereco é obrigatório!"/>
+            <p:inputText id="endereco" placeholder="Rua, bairro, cidade" value="#{pessoaBean.pessoa.endereco}"  required="true" requiredMessage="O endereco é obrigatório!"/>
             
             <p:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
-       		<p:commandButton value="Cancelar" action="#{PessoaBean.cancelar}"/>
+       		<p:commandButton value="Cancelar" action="#{pessoaBean.cancelar}"/>
 
         </p:panelGrid>
 	</p:panel>
@@ -51,30 +55,30 @@
 
         <hr/>
         
-        <p:messages style="color:red;" />
+       
 
     </h:form>
     
     <h:form>
         <p:dataTable var="usuario" value="#{UsuarioMB.usuarios}">
               <p:column headerText="Nome">
-                   <h:outputText value="" />
+                   <h:outputText value="usuario.nome" />
               </p:column>
 
               <p:column headerText="Sobrenome">
-                   <h:outputText value="" />
+                   <h:outputText value="usuario.sobrenome" />
               </p:column>
 
               <p:column headerText="Sexo">
-                   <h:outputText value="" />
+                   <h:outputText value="usuario.sexo" />
               </p:column>
 
               <p:column headerText="Nascimento">
-                   <h:outputText value="" />
+                   <h:outputText value="usuario.nascimento" />
               </p:column>
 
               <p:column headerText="Idade">
-                   <h:outputText value="" />
+                   <h:outputText value="usuario.idade" />
               </p:column>
         </p:dataTable>
    </h:form>
