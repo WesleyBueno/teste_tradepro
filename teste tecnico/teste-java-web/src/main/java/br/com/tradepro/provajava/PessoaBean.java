@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -29,6 +31,22 @@ public class PessoaBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Pessoa pessoa = new Pessoa();
+	
+	private List<Pessoa> pessoas;
+	
+	@PostConstruct
+	public void init() {
+		EntityManager em = EntityManagerProvider.getEntityManager();
+		try {
+			this.pessoas = em.createQuery("SELECT p FROM Pessoa p", Pessoa.class).getResultList();
+		} finally {
+			em.close();
+		}
+	}
+	
+	public List<Pessoa> getPessoas(){
+		return pessoas;
+	}
 
 	public PessoaBean() {
 
@@ -99,6 +117,8 @@ public class PessoaBean implements Serializable {
 			em.persist(this.pessoa);
 			em.getTransaction().commit();
 			
+			this.init(); 
+			
 			this.pessoa = new Pessoa();
 		} catch (Exception e) {
 			if(em.getTransaction().isActive()) {
@@ -108,5 +128,6 @@ public class PessoaBean implements Serializable {
 			em.close();
 		}
 	}
+	
 
 }

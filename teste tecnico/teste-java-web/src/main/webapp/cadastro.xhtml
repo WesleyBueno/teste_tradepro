@@ -16,7 +16,7 @@
 
 <h:body>
   
-    <h:form>
+    <h:form id="formCadastro">
     	<p:messages id="messages" showDetail="true" closable="true"><p:autoUpdate/></p:messages>
     
    <p:panel header="Cadastro de Nova Pessoa">
@@ -35,8 +35,10 @@
             </p:selectOneRadio>
 
             <p:outputLabel for="nascimento">Nascimento</p:outputLabel>
-            <p:inputText id="nascimento" value="#{pessoaBean.pessoa.dataNascimento}" required="true" requiredMessage="O nascimento é obrigatório!"/>
-
+            <p:calendar id="nascimento" value="#{pessoaBean.pessoa.dataNascimento}"
+            required="true" requiredMessage="O nascimento é obrigatório!"
+            pattern="dd/MM/yyyy" mask="true" showOn="button" />
+            
             <p:outputLabel for="cep">CEP</p:outputLabel>
             <p:inputMask id="cep" value="#{pessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!" mask="99999-999">
             	<p:ajax event="blur" listener="#{pessoaBean.buscarCep}" update="endereco messages" process="@this"></p:ajax>
@@ -46,42 +48,39 @@
             <p:outputLabel for="endereco" >Endereço</p:outputLabel>
             <p:inputText id="endereco" placeholder="Rua, bairro, cidade" value="#{pessoaBean.pessoa.endereco}"  required="true" requiredMessage="O endereco é obrigatório!"/>
             
-            <p:commandButton value="Salvar" action="#{pessoaBean.salvar}"/>
+            <p:commandButton value="Salvar" action="#{pessoaBean.salvar}" update="@form"/>
        		<p:commandButton value="Cancelar" action="#{pessoaBean.cancelar}"/>
 
         </p:panelGrid>
-	</p:panel>
-       
-
-        <hr/>
+	</p:panel><hr/>
         
        
+    	<p:dataTable id="tabelaPessoas" var="pessoa" value="#{pessoaBean.pessoas}" emptyMessage="Nenhum registro encontrado.">
+        
+        	<p:column headerText="Nome">
+            <h:outputText value="#{pessoa.nome}" />
+        	</p:column>
 
-    </h:form>
-    
-    <h:form>
-        <p:dataTable var="usuario" value="#{UsuarioMB.usuarios}">
-              <p:column headerText="Nome">
-                   <h:outputText value="usuario.nome" />
-              </p:column>
+        	<p:column headerText="Sobrenome">
+            	<h:outputText value="#{pessoa.sobrenome}" />
+        	</p:column>
 
-              <p:column headerText="Sobrenome">
-                   <h:outputText value="usuario.sobrenome" />
-              </p:column>
+        	<p:column headerText="Sexo">
+            	<h:outputText value="#{pessoa.sexo}" />
+        	</p:column>
 
-              <p:column headerText="Sexo">
-                   <h:outputText value="usuario.sexo" />
-              </p:column>
+        	<p:column headerText="Nascimento">
+            	<h:outputText value="#{pessoa.dataNascimento}">
+                	<f:convertDateTime pattern="dd/MM/yyyy" />
+            	</h:outputText>
+        	</p:column>
 
-              <p:column headerText="Nascimento">
-                   <h:outputText value="usuario.nascimento" />
-              </p:column>
-
-              <p:column headerText="Idade">
-                   <h:outputText value="usuario.idade" />
-              </p:column>
-        </p:dataTable>
-   </h:form>
+        	<p:column headerText="Idade">
+            	<h:outputText value="N/A" />
+        	</p:column>
+        
+    	</p:dataTable>
+	</h:form>
     
      
 </h:body>
