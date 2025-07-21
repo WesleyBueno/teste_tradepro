@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -154,6 +155,10 @@ public class PessoaBean implements Serializable {
 	
 	public void cancelar() {
 		this.pessoa = new Pessoa();
+	}
+	
+	public Date getHoje() {
+		return new Date();
 	}
 	
 
