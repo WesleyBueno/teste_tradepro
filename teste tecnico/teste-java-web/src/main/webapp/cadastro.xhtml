@@ -17,7 +17,7 @@
 <h:body>
   
     <h:form id="formCadastro">
-    	<p:messages id="messages" showDetail="true" closable="true"><p:autoUpdate/></p:messages>
+    	<p:messages id="messages" showDetail="false" closable="true"><p:autoUpdate/></p:messages>
     
    <p:panel header="Cadastro de Nova Pessoa">
         <p:panelGrid columns="2" >
@@ -28,7 +28,7 @@
             <p:outputLabel for="sobrenome">Sobrenome</p:outputLabel>
             <p:inputText id="sobrenome" value="#{pessoaBean.pessoa.sobrenome}" required="true" requiredMessage="O sobrenome é obrigatório!"/>
             
-            <p:outputLabel>Sexo</p:outputLabel>
+            <p:outputLabel for="sexo">Sexo</p:outputLabel>
         	<p:selectOneRadio id="sexo" value="#{pessoaBean.pessoa.sexo}" layout="lineDirection" required="true" requiredMessage="O sexo é obrigatório!">
         		<f:selectItem itemLabel="Feminino" itemValue="F"/>
             	<f:selectItem itemLabel="Masculino" itemValue="M"/>
@@ -41,7 +41,7 @@
             
             <p:outputLabel for="cep">CEP</p:outputLabel>
             <p:inputMask id="cep" value="#{pessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!" mask="99999-999">
-            	<p:ajax event="blur" listener="#{pessoaBean.buscarCep}" update="endereco messages" process="@this"></p:ajax>
+            	<p:ajax event="blur" listener="#{pessoaBean.buscarCep}" update="endereco" process="@this"></p:ajax>
             </p:inputMask>
             
             
