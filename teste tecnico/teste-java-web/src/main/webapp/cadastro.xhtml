@@ -49,7 +49,7 @@
             <p:inputText id="endereco" placeholder="Rua, bairro, cidade" value="#{pessoaBean.pessoa.endereco}"  required="true" requiredMessage="O endereco é obrigatório!"/>
             
             <p:commandButton value="Salvar" action="#{pessoaBean.salvar}" update="@form"/>
-       		<p:commandButton value="Cancelar" action="#{pessoaBean.cancelar}"/>
+       		<p:commandButton value="Cancelar" action="#{pessoaBean.cancelar}" process="@this" update="@form" immediate="true"/>
 
         </p:panelGrid>
 	</p:panel><hr/>

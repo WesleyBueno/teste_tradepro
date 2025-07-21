@@ -152,5 +152,9 @@ public class PessoaBean implements Serializable {
 		}
 	}
 	
+	public void cancelar() {
+		this.pessoa = new Pessoa();
+	}
+	
 
 }
