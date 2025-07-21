@@ -37,7 +37,7 @@
             <p:outputLabel for="nascimento">Nascimento</p:outputLabel>
             <p:calendar id="nascimento" value="#{pessoaBean.pessoa.dataNascimento}"
             required="true" requiredMessage="O nascimento é obrigatório!"
-            pattern="dd/MM/yyyy" mask="true" showOn="button" />
+            pattern="dd/MM/yyyy" mask="true"/>
             
             <p:outputLabel for="cep">CEP</p:outputLabel>
             <p:inputMask id="cep" value="#{pessoaBean.pessoa.cep}" required="true" requiredMessage="O cep é obrigatório!" mask="99999-999">
