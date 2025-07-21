@@ -14,12 +14,33 @@ import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.logging.SessionLog;
 
 /**
+ * Fornece instâncias do {@link EntityManager} para a aplicação.
+ * <p>
+ * Esta classe utilitária é responsável por criar e gerenciar o
+ * {@link EntityManagerFactory} como um singleton, garantindo que a conexão com
+ * o banco de dados seja configurada apenas uma vez.
+ * <p>
+ * As configurações do banco de dados (um H2 em memória) são definidas
+ * programaticamente, incluindo a geração automática do esquema (DDL).
  *
+ * @version 1.0
  */
 public class EntityManagerProvider {
 
+	/**
+	 * Instância única e estática do EntityManagerFactory, para garantir que seja
+	 * criada apenas uma vez (padrão Singleton).
+	 */
 	private static EntityManagerFactory emf = null;
 
+	/**
+	 * Obtém uma nova instância de {@link EntityManager}.
+	 * <p>
+	 * Este é o método público que deve ser chamado pela aplicação sempre que uma
+	 * nova operação com o banco de dados for necessária.
+	 *
+	 * @return Um novo {@link EntityManager} pronto para uso.
+	 */
 	public static EntityManager getEntityManager() {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
 		return entityManager;

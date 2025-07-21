@@ -25,19 +25,38 @@ import javax.persistence.TypedQuery;
 
 import br.com.tradepro.provajava.entity.Pessoa;
 
-
+/**
+ * Backing bean (controller) para a página de cadastro de pessoas (cadastro.xhtml).
+ * <p>
+ * Esta classe gerencia o estado da visão, incluindo o objeto {@link Pessoa} sendo
+ * criado ou editado no formulário e a lista de pessoas já cadastradas exibida na tabela.
+ * <p>
+ * Utiliza o escopo {@code @ViewScoped} para manter o estado da página durante
+ * as interações AJAX do usuário, como a busca de CEP e o salvamento de dados.
+ *
+ * @author Wesley Bueno
+ * @version 1.0
+ * @since 2025-07-18
+ */
 @Named
 @ViewScoped
 public class PessoaBean implements Serializable {
 
 	/**
-	 *
+	 * Controle de versão para a serialização do objeto.
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/** Objeto que armazena os dados da nova pessoa preenchida no formulário. */
 	private Pessoa pessoa = new Pessoa();
 	
+	/** Lista de todas as pessoas cadastradas, usada para popular a p:dataTable na view. */
 	private List<Pessoa> pessoas;
 	
+	/**
+	 * Método de inicialização executado uma vez após a criação do bean, com o {@code @PostConstruct}.
+	 * Carrega a lista de todas as pessoas a partir do banco de dados para popular a tabela na view.
+	 */
 	@PostConstruct
 	public void init() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
@@ -47,6 +66,8 @@ public class PessoaBean implements Serializable {
 			em.close();
 		}
 	}
+	
+	// --- Getters e Setters ---
 	
 	public List<Pessoa> getPessoas(){
 		return pessoas;
@@ -64,6 +85,18 @@ public class PessoaBean implements Serializable {
 		this.pessoa = pessoa;
 	}
 	
+	public Date getHoje() {
+		return new Date();
+	}
+	
+	
+	
+	/**
+	 * Action listener para o evento AJAX 'blur' do campo CEP.
+	 * <p>
+	 * Consulta a API externa BrasilAPI com o CEP digitado pelo usuário, processa o
+	 * retorno JSON e preenche automaticamente o campo de endereço do objeto {@code pessoa}.
+	 */
 	public void buscarCep() {
 		String cep = this.pessoa.getCep();
 		
@@ -113,6 +146,15 @@ public class PessoaBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Action method para o botão "Salvar".
+	 * <p>
+	 * Valida pelo nome e sobrenome, se a pessoa já existe no banco de dados. Se não
+	 * existir, persiste o novo objeto {@link Pessoa}, atualiza a lista em memória
+	 * para exibição na tabela e limpa o formulário para um novo cadastro.
+	 * <p>
+	 * Adiciona mensagens de sucesso ou erro ao {@link FacesContext}.
+	 */
 	public void salvar() {
 		EntityManager em = EntityManagerProvider.getEntityManager();
 		
@@ -153,12 +195,12 @@ public class PessoaBean implements Serializable {
 		}
 	}
 	
+	/**
+	 * Action method para o botão "Cancelar".
+	 * Limpa os campos do formulário reiniciando o objeto {@code pessoa} com uma nova instância vazia.
+	 */
 	public void cancelar() {
 		this.pessoa = new Pessoa();
-	}
-	
-	public Date getHoje() {
-		return new Date();
 	}
 	
 
